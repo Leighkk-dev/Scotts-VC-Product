@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Investment Evaluation System - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: #1976d2;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: white;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+            padding: 2rem 0;
+        }
+        
+        .nav-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #f0f7ff;
+            border-left-color: #1976d2;
+            color: #1976d2;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .page {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-zone {
+            border: 2px dashed #1976d2;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            background: #f8f9ff;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-zone:hover {
+            background: #f0f7ff;
+            border-color: #1565c0;
+        }
+        
+        .btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #1565c0;
+        }
+        
+        .document-list {
+            margin-top: 2rem;
+        }
+        
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            background: white;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .evaluation-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: white;
+        }
+        
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(#4caf50 0deg 252deg, #e0e0e0 252deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+            margin: 0 auto 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 AI Investment Evaluation System</h1>
+        <p>Phase 2 Complete - Document Processing & Analysis Engine</p>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="nav-item active" onclick="showPage('dashboard')">📊 Dashboard</div>
+            <div class="nav-item" onclick="showPage('ventures')">🏢 Ventures</div>
+            <div class="nav-item" onclick="showPage('documents')">📄 Documents</div>
+            <div class="nav-item" onclick="showPage('evaluations')">⚡ Evaluations</div>
+            <div class="nav-item" onclick="showPage('settings')">⚙️ Settings</div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <h2>Investment Dashboard</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div>Active Ventures</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">47</div>
+                        <div>Documents Processed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8</div>
+                        <div>Evaluations Complete</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">73%</div>
+                        <div>Average Confidence</div>
+                    </div>
+                </div>
+                
+                <h3>Recent Activity</h3>
+                <div class="document-item">
+                    <div>
+                        <strong>TechStart Pitch Deck</strong><br>
+                        <small>Uploaded 2 hours ago</small>
+                    </div>
+                    <span class="status-badge status-completed">✅ Analyzed</span>
+                </div>
+                <div class="document-item">
+                    <div>
+                        <strong>GreenEnergy Business Plan</strong><br>
+                        <small>Uploaded 4 hours ago</small>
+                    </div>
+                    <span class="status-badge status-processing">⏳ Processing</span>
+                </div>
+            </div>
+            
+            <!-- Ventures Page -->
+            <div id="ventures" class="page">
+                <h2>Venture Portfolio</h2>
+                <button class="btn">+ Add New Venture</button>
+                
+                <div style="margin-top: 2rem;">
+                    <div class="evaluation-card">
+                        <h3>TechStart AI Solutions</h3>
+                        <p><strong>Industry:</strong> Artificial Intelligence</p>
+                        <p><strong>Stage:</strong> Series A</p>
+                        <p><strong>Last Updated:</strong> 2 hours ago</p>
+                        <div class="score-circle">7.2</div>
+                        <p style="text-align: center; color: #666;">Investment Score</p>
+                    </div>
+                    
+                    <div class="evaluation-card">
+                        <h3>GreenEnergy Solutions</h3>
+                        <p><strong>Industry:</strong> Clean Technology</p>
+                        <p><strong>Stage:</strong> Seed</p>
+                        <p><strong>Last Updated:</strong> 1 day ago</p>
+                        <div class="score-circle">8.5</div>
+                        <p style="text-align: center; color: #666;">Investment Score</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Documents Page -->
+            <div id="documents" class="page">
+                <h2>Document Processing Center</h2>
+                <p style="margin-bottom: 2rem;">Upload and analyze investment documents with AI-powered insights</p>
+                
+                <div class="upload-zone" onclick="alert('This is a preview - drag & drop functionality available in the full app!')">
+                    <h3>📁 Drop files here or click to upload</h3>
+                    <p>Supported: PDF, PowerPoint, Excel, Word documents</p>
+                    <p style="color: #666; margin-top: 1rem;">Maximum file size: 50MB</p>
+                </div>
+                
+                <h3>Document Library</h3>
+                <div class="document-list">
+                    <div class="document-item">
+                        <div>
+                            <strong>📄 TechStart_PitchDeck.pdf</strong><br>
+                            <small>2.3 MB • Uploaded 2 hours ago</small>
+                        </div>
+                        <span class="status-badge status-completed">✅ Processed</span>
+                    </div>
+                    <div class="document-item">
+                        <div>
+                            <strong>📊 Financial_Projections.xlsx</strong><br>
+                            <small>1.8 MB • Uploaded 4 hours ago</small>
+                        </div>
+                        <span class="status-badge status-processing">⏳ Processing</span>
+                    </div>
+                    <div class="document-item">
+                        <div>
+                            <strong>📝 Business_Plan.docx</strong><br>
+                            <small>4.1 MB • Uploaded 1 day ago</small>
+                        </div>
+                        <span class="status-badge status-completed">✅ Processed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evaluations Page -->
+            <div id="evaluations" class="page">
+                <h2>Investment Evaluations</h2>
+                <p style="margin-bottom: 2rem;">AI-powered analysis and scoring of venture opportunities</p>
+                
+                <div class="evaluation-card">
+                    <h3>TechStart AI Solutions - Evaluation Report</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                        <div style="text-align: center;">
+                            <div class="score-circle" style="width: 60px; height: 60px; font-size: 1rem;">8.2</div>
+                            <p><strong>Financial Health</strong></p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="score-circle" style="width: 60px; height: 60px; font-size: 1rem;">7.5</div>
+                            <p><strong>Market Opportunity</strong></p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="score-circle" style="width: 60px; height: 60px; font-size: 1rem;">6.8</div>
+                            <p><strong>Team Assessment</strong></p>
+                        </div>
+                    </div>
+                    
+                    <h4>Key Insights:</h4>
+                    <ul style="margin: 1rem 0; padding-left: 2rem;">
+                        <li>Strong revenue growth trajectory (150% YoY)</li>
+                        <li>Experienced founding team with relevant background</li>
+                        <li>Large addressable market ($2.3B TAM)</li>
+                        <li>Competitive landscape requires attention</li>
+                    </ul>
+                    
+                    <p><strong>Recommendation:</strong> <span style="color: #4caf50;">PROCEED</span> - High potential with manageable risks</p>
+                    <p><strong>Confidence Level:</strong> 78%</p>
+                </div>
+            </div>
+            
+            <!-- Settings Page -->
+            <div id="settings" class="page">
+                <h2>System Settings</h2>
+                
+                <h3>Analysis Configuration</h3>
+                <div style="margin: 2rem 0;">
+                    <label style="display: block; margin-bottom: 0.5rem;">
+                        <input type="checkbox" checked> Enable financial ratio analysis
+                    </label>
+                    <label style="display: block; margin-bottom: 0.5rem;">
+                        <input type="checkbox" checked> Perform market sentiment analysis
+                    </label>
+                    <label style="display: block; margin-bottom: 0.5rem;">
+                        <input type="checkbox" checked> Team background verification
+                    </label>
+                    <label style="display: block; margin-bottom: 0.5rem;">
+                        <input type="checkbox"> Enable regulatory compliance checks
+                    </label>
+                </div>
+                
+                <h3>Notification Preferences</h3>
+                <div style="margin: 2rem 0;">
+                    <label style="display: block; margin-bottom: 0.5rem;">
+                        <input type="checkbox" checked> Email alerts for completed evaluations
+                    </label>
+                    <label style="display: block; margin-bottom: 0.5rem;">
+                        <input type="checkbox"> SMS notifications for high-priority ventures
+                    </label>
+                </div>
+                
+                <button class="btn">Save Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add active to clicked nav item
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

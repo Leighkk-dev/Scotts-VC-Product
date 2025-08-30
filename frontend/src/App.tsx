@@ -14,9 +14,11 @@ import SettingsPage from './pages/Settings/SettingsPage';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // DEV MODE: Skip authentication check for development
+  const isDev = true; // Set to false when you want to enable auth
   const { isAuthenticated } = useAuthStore();
   
-  if (!isAuthenticated) {
+  if (!isDev && !isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
   
