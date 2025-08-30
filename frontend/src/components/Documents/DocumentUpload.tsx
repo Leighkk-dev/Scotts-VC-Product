@@ -44,6 +44,16 @@ interface DocumentUploadProps {
 }
 
 const SUPPORTED_TYPES = {
+  'application/pdf': ['application/pdf'],
+  'application/vnd.ms-powerpoint': ['application/vnd.ms-powerpoint'],
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['application/vnd.openxmlformats-officedocument.presentationml.presentation'],
+  'application/vnd.ms-excel': ['application/vnd.ms-excel'],
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+  'application/msword': ['application/msword'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+};
+
+const SUPPORTED_TYPE_LABELS = {
   'application/pdf': 'PDF',
   'application/vnd.ms-powerpoint': 'PowerPoint',
   'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PowerPoint',
@@ -116,7 +126,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ ventureId, onUploadComp
       });
 
       if (!response.ok) {
-        throw new Error(`Upload failed: ${response.statusText}`);
+        throw new (Error as any)(`Upload failed: ${response.statusText}`);
       }
 
       const result = await response.json();
@@ -142,7 +152,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ ventureId, onUploadComp
           ? { 
               ...f, 
               status: 'error', 
-              error: error instanceof Error ? error.message : 'Upload failed' 
+              error: (error as any)?.message || 'Upload failed' 
             }
           : f
       ));
@@ -162,7 +172,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ ventureId, onUploadComp
         });
 
         if (!response.ok) {
-          throw new Error('Failed to get processing status');
+          throw new (Error as any)('Failed to get processing status');
         }
 
         const status = await response.json();
@@ -284,7 +294,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ ventureId, onUploadComp
           or click to browse files
         </Typography>
         <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
-          {Object.values(SUPPORTED_TYPES).map((type, index) => (
+          {Object.values(SUPPORTED_TYPE_LABELS).map((type, index) => (
             <Chip key={index} label={type} size="small" variant="outlined" />
           ))}
         </Box>
@@ -310,7 +320,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ ventureId, onUploadComp
                   secondary={
                     <Box>
                       <Typography variant="caption" display="block">
-                        {(file.file.size / 1024 / 1024).toFixed(2)} MB • {SUPPORTED_TYPES[file.file.type as keyof typeof SUPPORTED_TYPES]}
+                        {(file.file.size / 1024 / 1024).toFixed(2)} MB • {SUPPORTED_TYPE_LABELS[file.file.type as keyof typeof SUPPORTED_TYPE_LABELS]}
                       </Typography>
                       {file.status === 'uploading' && (
                         <LinearProgress 
@@ -391,7 +401,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ ventureId, onUploadComp
                 Size: {(selectedFile.file.size / 1024 / 1024).toFixed(2)} MB
               </Typography>
               <Typography variant="body2">
-                Type: {SUPPORTED_TYPES[selectedFile.file.type as keyof typeof SUPPORTED_TYPES]}
+                Type: {SUPPORTED_TYPE_LABELS[selectedFile.file.type as keyof typeof SUPPORTED_TYPE_LABELS]}
               </Typography>
             </Box>
           )}
